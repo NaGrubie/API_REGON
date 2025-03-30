@@ -63,7 +63,41 @@ wyloguj(sid)
 ```
 
 ## Report Types
-The default report type is "BIR11OsPrawna" for legal entities. Other report types are available depending on entity type.
+The default report type is "BIR11OsPrawna" for legal entities. The API supports various report types depending on the entity type:
+
+| Type | SILOSD | Report Name | Description |
+|------|--------|-------------|-------------|
+| F | 1/2/3 | BIR11OsFizycznaDaneOgolne | General data for natural persons across all business activities |
+| F | 1/2/3 | BIR12OsFizycznaDaneOgolne | Same functionality as above, no significant differences |
+| F | 1 | BIR11OsFizycznaDzialalnoscCeidg | Data about activity registered in CEIDG, including business address |
+| F | 1 | BIR12OsFizycznaDzialalnoscCeidg | Enhanced functionality with LENGTH(fiz_adSiedzNumeroLokalu)=20 |
+| F | 2 | BIR11OsFizycznaDzialalnoscRolnicza | Data about agricultural activity, including address |
+| F | 2 | BIR12OsFizycznaDzialalnoscRolnicza | Enhanced functionality with LENGTH(fiz_adSiedzNumeroLokalu)=20 |
+| F | 3 | BIR11OsFizycznaDzialalnoscPozostala | Data about other activities not in CEIDG or agriculture |
+| F | 3 | BIR12OsFizycznaDzialalnoscPozostala | Enhanced functionality with LENGTH(fiz_adSiedzNumeroLokalu)=20 |
+| F | 4 | BIR11OsFizycznaDzialalnoscSkreslonaDo20141108 | Data about activity deleted from REGON before 2014-11-08 |
+| F | 4 | BIR12OsFizycznaDzialalnoscSkreslonaDo20141108 | Same functionality as above, no significant differences |
+| F | 1/2/3 | BIR11OsFizycznaPkd | List of PKD codes for natural person |
+| F | 1/2/3 | BIR12OsFizycznaPkd | Enhanced functionality with additional XML element |
+| F | 1/2/3 | BIR11OsFizycznaListaJednLokalnych | List of local units registered for a natural person |
+| F | 1/2/3 | BIR12OsFizycznaListaJednLokalnych | Enhanced functionality with LENGTH(fiz_adSiedzNumeroLokalu)=20 |
+| LF | 1/2/3 | BIR11JednLokalnaOsFizycznej | Data of local unit of natural person |
+| LF | 1/2/3 | BIR12JednLokalnaOsFizycznej | Enhanced functionality with LENGTH(lokfiz_adSiedzNumeroLokalu)=20 |
+| LF | 1/2/3 | BIR11JednLokalnaOsFizycznejPkd | List of PKD codes for local unit of natural person |
+| LF | 1/2/3 | BIR12JednLokalnaOsFizycznejPkd | Enhanced functionality with additional XML element |
+
+Legend:
+- Type F = Natural person
+- Type LF = Local unit of a natural person
+- SILOSD = Business activity type code (1 = CEIDG, 2 = Agriculture, 3 = Other, 4 = Deleted activities)
+
+This table shows the report types for natural persons (F) and their local units (LF). Each report serves a specific purpose such as getting general information, specific activity data, or PKD codes.
+
+## Current Limitations and Roadmap
+
+**DISCLAIMER:** This tool currently only supports the "DanePobierzPelnyRaport" method for retrieving full entity reports. The "DaneSzukajPodmioty" method for searching entities will be added in a future update.
+
+The current implementation focuses on retrieving detailed reports for entities when you already know their REGON numbers. Entity search functionality is planned for an upcoming release.
 
 ## Troubleshooting
 - The script includes extensive error handling to deal with API response parsing issues
