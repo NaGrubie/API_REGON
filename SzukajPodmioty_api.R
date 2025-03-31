@@ -7,7 +7,7 @@ library(readr)
 library(httr2)
 library(xml2)
 
-# Dane logowania do API BIR
+# Dane logowania do API BIR  - W przypadku uzyskania Klucza osobistego z każdej instancji poniższego linku usunąć 'test'
 BIR_URL <- "https://wyszukiwarkaregontest.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc"
 USER_KEY <- "abcde12345abcde12345"  # Wpisz tutaj swój klucz API
 
