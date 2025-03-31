@@ -1,14 +1,15 @@
 # API REGON GUS Data Extraction Tool
 
 ## Overview
-This R script provides functionality for connecting to the BIR (Business Intelligence Reporting) API of Poland's Central Statistical Office (GUS) and extracting full reports for business entities based on their REGON numbers. The tool enables both individual and batch processing of REGON numbers.
+This R script provides functionality for connecting to the BIR (Business Intelligence Reporting) API of Poland's Central Statistical Office (GUS). It allows both searching for business entities using various identifiers (NIP, REGON, KRS) and extracting full reports for business entities based on their REGON numbers. The tool enables both individual and batch processing.
 
 ## Features
 - Authentication with the GUS REGON API using API key
 - Session management (login/logout)
+- Searching for entities by NIP, REGON, KRS and other identifiers
 - Retrieving detailed reports for business entities
 - Parsing XML responses into usable data frames
-- Batch processing of multiple REGON numbers from a text file
+- Batch processing of multiple identifiers from a text file
 - Exporting results to delimited text files
 
 ## Requirements
@@ -35,8 +36,31 @@ USER_KEY <- "your_api_key_here"
 sid <- zaloguj()
 ```
 
-### Individual REGON Query
-To extract data for a single REGON number:
+### Searching for Entities
+To search for business entities using various identifiers:
+```R
+# Search by NIP
+nip_results <- search_and_parse("6262619005", "Nip", user_key = USER_KEY)
+
+# Search by REGON
+regon_results <- search_and_parse("000331501", "Regon", user_key = USER_KEY)
+
+# Search by KRS
+krs_results <- search_and_parse("0000405885", "Krs", user_key = USER_KEY)
+
+# Save the search results to a file
+write_delim(nip_results, "search_results.txt", delim="|")
+```
+
+### Batch Processing of Search Queries
+To process multiple identifiers from a file:
+```R
+# Process a file containing NIPs (one per line)
+process_nip_file("path_to_nip_file.txt", "output_file.txt", user_key = USER_KEY)
+```
+
+### Individual REGON Full Report Query
+To extract detailed data for a single REGON number:
 ```R
 # Get full report for a specific REGON
 result_regon <- get_full_report_result("273650781", "BIR11OsPrawna", user_key = USER_KEY, sid = sid)
@@ -49,7 +73,7 @@ dane_df <- parse_full_report(response_text)
 write_delim(dane_df, "output_file.txt", delim="|")
 ```
 
-### Batch Processing
+### Batch Processing of Full Reports
 To process multiple REGON numbers from a file:
 ```R
 # Process a file containing REGON numbers (one per line)
@@ -61,6 +85,19 @@ Always logout from the API when you're done:
 ```R
 wyloguj(sid)
 ```
+
+## Search Parameters
+The search functionality supports various parameters:
+
+| Parameter Name | Description |
+|----------------|-------------|
+| Nip            | Single NIP number |
+| Regon          | Single REGON number |
+| Krs            | Single KRS number |
+| Nipy           | Multiple NIP numbers (comma separated) |
+| Regony9zn      | Multiple 9-digit REGON numbers (comma separated) |
+| Regony14zn     | Multiple 14-digit REGON numbers (comma separated) |
+| Krsy           | Multiple KRS numbers (comma separated) |
 
 ## Report Types
 The default report type is "BIR11OsPrawna" for legal entities. The API supports various report types depending on the entity type:
@@ -93,11 +130,10 @@ Legend:
 
 This table shows the report types for natural persons (F) and their local units (LF). Each report serves a specific purpose such as getting general information, specific activity data, or PKD codes.
 
-## Current Limitations and Roadmap
-
-**DISCLAIMER:** This tool currently only supports the "DanePobierzPelnyRaport" method for retrieving full entity reports. The "DaneSzukajPodmioty" method for searching entities will be added in a future update.
-
-The current implementation focuses on retrieving detailed reports for entities when you already know their REGON numbers. Entity search functionality is planned for an upcoming release.
+## Complete API Functionality
+This tool now supports both major methods of the REGON API:
+1. **DaneSzukajPodmioty** - For searching and retrieving basic entity information
+2. **DanePobierzPelnyRaport** - For retrieving detailed reports for entities
 
 ## Troubleshooting
 - The script includes extensive error handling to deal with API response parsing issues
