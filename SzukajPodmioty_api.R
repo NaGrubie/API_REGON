@@ -373,7 +373,7 @@ search_and_parse <- function(parameter_value, parameter_name = "Nip", user_key =
 nip_results <- search_and_parse("6262619005", "Nip")
 
 # Zapisujemy wyniki do pliku z separatorem |
-write_delim(nip_results, "dolor.txt", delim="|")#, append = TRUE)
+write_delim(nip_results, "loremipsum.txt", delim="|")#, append = TRUE)
 
 
 # Funkcja do przetwarzania wielu NIP-ów z pliku i dołączania wyników do istniejącego pliku wyjściowego
